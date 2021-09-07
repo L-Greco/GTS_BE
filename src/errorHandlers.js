@@ -47,8 +47,8 @@ const notFoundHandler = function (error, req, res, next) {
 };
 
 const catchAllHandler = function (error, req, res, next) {
-    console.log("are we still comming here?")
-    if (error.status === 500 || error.status !== 500) console.log(error + "here is my console log");
+    console.log(error)
+
     res.status(500).send(error);
 };
 
