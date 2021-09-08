@@ -5,27 +5,30 @@ const snippetSchema = new Schema(
     {
         userId: {
             type: String,
-            // required: true,
+
         },
         title: {
-            type: String,
-            required: true,
+            type: String
+
         },
         language: {
             type: String,
-            required: false,
+
         },
         code: {
             type: String,
-            required: false
+
         },
         parent: {
-            type: String,
-            required: true
+            type: String
+
         },
         public: {
             type: Boolean,
-            required: false
+
+        },
+        queryParameters: {
+            type: String
         }
     },
     { timestamps: true }

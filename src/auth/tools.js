@@ -6,14 +6,37 @@ import jwt from "jsonwebtoken"
 // i function , otan mesa sthn function den uparxei i callbakc tote einai syncrhonous
 // dld apla  jwt.sign(payload, process.env.JWT_TOKEN_SECRET)
 
+import UserModel from "../services/users/schema.js"
+import createError from "http-errors";
 
-const generateJWT = payload =>
+
+const generateAccessToken = (payload) =>
     new Promise((resolve, reject) =>
-        jwt.sign(payload, process.env.JWT_TOKEN_SECRET, { expiresIn: "14 days" }), (err, token) => {
-            if (err) reject(err)
-            resolve(token)
-        }
-    )
+        jwt.sign(
+            payload,
+            process.env.JWT_TOKEN_SECRET,
+            { expiresIn: "100 min" },
+            (err, token) => {
+                if (err) reject(err);
+
+                resolve(token);
+            }
+        )
+    );
+
+const generateRefreshToken = (payload) =>
+    new Promise((resolve, reject) =>
+        jwt.sign(
+            payload,
+            process.env.JWT_TOKEN_SECRET,
+            { expiresIn: "15 days" },
+            (err, token) => {
+                if (err) reject(err);
+
+                resolve(token);
+            }
+        )
+    );
 
 const verifyToken = token => new Promise((resolve, reject) =>
     jwt.verify(token, process.env.JWT_TOKEN_SECRET, (err, decodedToken) => {
@@ -23,5 +46,90 @@ const verifyToken = token => new Promise((resolve, reject) =>
 )
 
 export const JWTgenerator = async (user) => {
-    const accessToken = await generateJWT({ _id: user._id })
+    const accessToken = await generateAccessToken({ _id: user._id });
+    const refreshToken = await generateRefreshToken({ _id: user._id });
+
+    user.refreshToken = refreshToken;
+
+    await user.save()
+
+    return { accessToken, refreshToken }
 }
+export const JWTMiddleWare = async (req, res, next) => {
+    console.log(req.cookies)
+    if (!req.cookies.accessToken) {
+        next(createError(401, { message: "Provide Access Token" }));
+    } else {
+        try {
+            const content = await verifyToken(req.cookies.accessToken);
+
+            const user = await UserModel.findById(content._id)
+            if (user) {
+                req.user = user;
+                next();
+            } else {
+                next(createError(404, { message: "User not found" }));
+            }
+        } catch (error) {
+            next(createError(401, { message: "AccessToken not valid" }));
+        }
+    }
+};
+
+export const refreshTokens = async (req, res, next) => {
+    try {
+        // 1. Is the actual refresh token still valid?
+        const decoded = await verifyToken(req.cookies.refreshToken)
+
+        // 2. If the token is valid we are going to find the user in db
+        const user = await UserModel.findById(decoded._id)
+
+        // 3. Once we have the user we can compare actualRefreshToken with the one stored in db
+        if (user) {
+            if (req.cookies.refreshToken === user.refreshToken) {
+                // 4. If everything is fine we can generate the new pair of tokens
+                const { accessToken, refreshToken } = await JWTgenerator(user)
+                user.refreshToken = refreshToken
+                await user.save()
+                console.log(user)
+                res.cookie("accessToken", accessToken, {
+                    httpOnly: true,
+                });
+                res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,
+                });
+                next()
+            }
+        } else next(createError(404, { message: "User not found" }));
+
+
+    } catch (error) {
+        console.log(error)
+        next(createError(401, { message: "Token not valid" }));
+    }
+}
+
+
+// export const refreshTokens = async actualRefreshToken => {
+//     try {
+//         // 1. Is the actual refresh token still valid?
+//         const decoded = await verifyToken(actualRefreshToken)
+
+//         // 2. If the token is valid we are going to find the user in db
+//         const user = await UserModel.findById(decoded._id)
+//         console.log(user)
+// // 3. Once we have the user we can compare actualRefreshToken with the one stored in db
+//         if (user)  {
+//             if (actualRefreshToken === user.refreshToken) {
+//             // 4. If everything is fine we can generate the new pair of tokens
+//             const { accessToken, refreshToken } = await JWTgenerator(user)
+//             return { accessToken, refreshToken }
+//         }
+//         } else return "User not found "
+
+
+//     } catch (error) {
+//         console.log(error)
+//        return error
+//     }
+// }
