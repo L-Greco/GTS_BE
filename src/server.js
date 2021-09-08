@@ -6,6 +6,7 @@ import errorHandlers from "./errorHandlers.js";
 import passport from "passport";
 import oauth from "./auth/oauth.js"
 import usersRouter from "./services/users/index.js";
+import cookieParser from "cookie-parser";
 
 const server = express();
 const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
@@ -13,6 +14,7 @@ const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
 // *********************** MIDDLEWARES *********************** //
 
 server.use(express.json());
+server.use(cookieParser());
 server.use(cors())
 server.use(passport.initialize())
 
