@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 //  await generateJWT , to new Promise exei mesa tou mia callback me 2 parameters 
 //  to resolve otan den uparxei error kai to reject otan uparxei error 
 // oson afora to jwt library otan valoume thn callback mesa sto sign einai asynchronous
-// i function , otan mesa sthn function den uparxei i callbakc tote einai syncrhonous
+// i function , otan mesa sthn function den uparxei i callback tote einai syncrhonous
 // dld apla  jwt.sign(payload, process.env.JWT_TOKEN_SECRET)
 
 import UserModel from "../services/users/schema.js"

@@ -5,6 +5,7 @@ const snippetSchema = new Schema(
     {
         userId: {
             type: String,
+            required: true
 
         },
         title: {
@@ -20,7 +21,8 @@ const snippetSchema = new Schema(
 
         },
         parent: {
-            type: String
+            homePage: { type: Boolean, default: true },
+            folder: { type: String }
 
         },
         public: {
