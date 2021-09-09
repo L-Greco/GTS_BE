@@ -1,8 +1,113 @@
 import express from "express";
 import passport from "passport";
 import UserModel from "./schema.js"
-import { JWTMiddleWare, JWTgenerator, refreshTokens } from "../../auth/tools.js";
+import createError from "http-errors";
+import bcrypt from "bcrypt"
+import { JWTMiddleWare, JWTgenerator, refreshTokens, basicAuthMiddleware } from "../../auth/tools.js";
 const usersRouter = express.Router();
+
+
+usersRouter.post(
+    "/register",
+    async (req, res, next) => {
+        try {
+            const newUser = await new UserModel(req.body).save();
+            res.status(201).send(newUser);
+        } catch (error) {
+            if (error.name === "MongoError")
+                res.send({
+                    error: error.keyValue,
+                    reason: "Duplicated key",
+                    advice: "Change the key value",
+                });
+            else if (error.name === "ValidationError") res.send(error.message);
+            else next(createError(400, { message: error.message }));
+        }
+    }
+);
+
+usersRouter.get(
+    "/login",
+    basicAuthMiddleware,
+    async (req, res, next) => {
+        try {
+            if (req.user) {
+                const { accessToken, refreshToken } = await JWTgenerator(req.user);
+                res.cookie("accessToken", accessToken, { httpOnly: true });
+                res.cookie("refreshToken", refreshToken, { httpOnly: true });
+                res.status(200).send(req.user);
+            }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+);
+
+usersRouter.put(
+    "/edit",
+    JWTMiddleWare,
+    async (req, res, next) => {
+        try {
+
+            if (req.user.password !== req.body.password) {
+                req.body.password = await bcrypt.hash(req.body.password, 10)
+            }
+            const updatedUser = await UserModel.updateOne(
+                { _id: req.user._id },
+                {
+                    ...req.body,
+
+                },
+                { runValidators: true, new: true }
+            );
+            res.status(201).send(updatedUser);
+        } catch (error) {
+            if (error.name === "MongoError")
+                res.send({
+                    error: error.keyValue,
+                    reason: "Duplicated key",
+                    advice: "Change the key value",
+                });
+            else if (error.name === "ValidationError") res.send(error.message);
+            else next(createError(500, { message: error.message }));
+        }
+    }
+);
+
+usersRouter.delete(
+    "/delete",
+    JWTMiddleWare,
+    async (req, res, next) => {
+        try {
+            const deletedUser = await UserModel.findByIdAndDelete(req.user._id);
+            if (deletedUser) res.status(201).send("Profile deleted");
+            else next(createError(400, "Bad Request"));
+        } catch (error) {
+            next(createError(500, { message: error.message }));
+        }
+    }
+);
+
+usersRouter.post(
+    "/logout",
+    JWTMiddleWare,
+    async (req, res, next) => {
+        try {
+            if (req.user) {
+                res.clearCookie("accessToken");
+                res.clearCookie("refreshToken");
+                res.status(200).send();
+            }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+);
+
+
+
 
 
 usersRouter.get("/refreshToken/:endpointToReach", refreshTokens, async (req, res, next) => {

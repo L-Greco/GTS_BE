@@ -1,14 +1,15 @@
 import jwt from "jsonwebtoken"
+import atob from "atob"
+import UserModel from "../services/users/schema.js"
+import createError from "http-errors";
+
+
 // edw dhmiourgw ena kainourgio promise oste na mporw meta na pw 
 //  await generateJWT , to new Promise exei mesa tou mia callback me 2 parameters 
 //  to resolve otan den uparxei error kai to reject otan uparxei error 
 // oson afora to jwt library otan valoume thn callback mesa sto sign einai asynchronous
 // i function , otan mesa sthn function den uparxei i callback tote einai syncrhonous
 // dld apla  jwt.sign(payload, process.env.JWT_TOKEN_SECRET)
-
-import UserModel from "../services/users/schema.js"
-import createError from "http-errors";
-
 
 const generateAccessToken = (payload) =>
     new Promise((resolve, reject) =>
@@ -109,6 +110,24 @@ export const refreshTokens = async (req, res, next) => {
     }
 }
 
+
+export const basicAuthMiddleware = async (req, res, next) => {
+    if (!req.headers.authorization) {
+        next(createError(401, { message: "Authorization required" }));
+    } else {
+        const decoded = atob(req.headers.authorization.split(" ")[1]);
+        const [email, password] = decoded.split(":");
+
+        const user = await UserModel.checkCredentials(email, password);
+
+        if (user) {
+            req.user = user;
+            next();
+        } else {
+            next(createError(401, { message: "Credentials wrong" }));
+        }
+    }
+};
 
 // export const refreshTokens = async actualRefreshToken => {
 //     try {
