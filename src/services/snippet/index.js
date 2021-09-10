@@ -18,8 +18,18 @@ SnippetRouter.post("/", async (req, res, next) => {
 
 SnippetRouter.get("/home", async (req, res, next) => {
     try {
-
-        const homeSnippets = await SnippetModel.find({ $and: [{ "parent.folder": { $eq: "none" } }, { "userId": req.user._id }] })
+        console.time("mongo")
+        const homeSnippets = await SnippetModel.find({
+            $and:
+                [
+                    { "parent.folder": { $eq: "none" } },
+                    { "userId": req.user._id }
+                ]
+        },
+            { title: 1, language: 1 }
+        )
+        console.timeEnd("mongo") // 2 snippets with the filtering ===> mongo: 63.642ms 
+        //  all the data  for 2 snippets ===>  mongo: 66.269ms
         res.status(200).send(homeSnippets)
     } catch (error) {
         console.log(error)
