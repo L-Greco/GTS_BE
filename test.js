@@ -11,9 +11,10 @@
 //     console.log(aaa)
 // }
 //     , 1000)
-import bcrypt from "bcrypt"
-console.time("bcrypt")
-let asd = await bcrypt.hash("i am kostas", 10)
-console.timeEnd("bcrypt")
+// import bcrypt from "bcrypt"
+// console.time("bcrypt")
+// let asd = await bcrypt.hash("i am kostas", 10)
+// console.timeEnd("bcrypt")
 
-console.log(asd)
+// console.log(asd)
+

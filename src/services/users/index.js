@@ -114,12 +114,12 @@ usersRouter.post(
 
 
 
-usersRouter.get("/refreshToken/:endpointToReach", refreshTokens, async (req, res, next) => {
+usersRouter.get("/refreshToken/", refreshTokens, async (req, res, next) => {
     // we go to this route when the access token is invalid so we create a new pair 
     // of tokens
     try {
 
-        res.status(200).redirect(process.env.FE_URL + "/" + req.params.endpointToReach) //here redirects to logout
+        res.status(200).send("ok")
     } catch (error) {
         next(error)
     }
