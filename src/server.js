@@ -7,6 +7,8 @@ import passport from "passport";
 import oauth from "./auth/oauth.js"
 import usersRouter from "./services/users/index.js";
 import cookieParser from "cookie-parser";
+import SnippetRouter from "./services/snippet/index.js";
+import { JWTMiddleWare } from "./auth/tools.js";
 
 const server = express();
 const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
@@ -21,6 +23,7 @@ server.use(passport.initialize())
 // *********************** ROUTES *********************** //
 
 server.use("/users", usersRouter)
+server.use("/snippets", JWTMiddleWare, SnippetRouter)
 
 // *********************** ERROR HANDLERS *********************** //
 server.use(errorHandlers)

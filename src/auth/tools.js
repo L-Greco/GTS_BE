@@ -63,8 +63,8 @@ export const JWTMiddleWare = async (req, res, next) => {
     } else {
         try {
             const content = await verifyToken(req.cookies.accessToken);
-
             const user = await UserModel.findById(content._id)
+
             if (user) {
                 req.user = user;
                 next();

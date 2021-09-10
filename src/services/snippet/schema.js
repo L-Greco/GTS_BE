@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const snippetSchema = new Schema(
     {
         userId: {
-            type: String,
+            type: mongoose.Types.ObjectId, ref: "User",
             required: true
 
         },

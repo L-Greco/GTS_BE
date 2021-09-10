@@ -81,7 +81,11 @@ usersRouter.delete(
     async (req, res, next) => {
         try {
             const deletedUser = await UserModel.findByIdAndDelete(req.user._id);
-            if (deletedUser) res.status(201).send("Profile deleted");
+            if (deletedUser) {
+                res.clearCookie("accessToken");
+                res.clearCookie("refreshToken");
+                res.status(201).send("Profile deleted");
+            }
             else next(createError(400, "Bad Request"));
         } catch (error) {
             next(createError(500, { message: error.message }));
