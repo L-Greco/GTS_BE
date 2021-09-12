@@ -84,6 +84,8 @@ export const refreshTokens = async (req, res, next) => {
 
         // 2. If the token is valid we are going to find the user in db
         const user = await UserModel.findById(decoded._id)
+        console.log(decoded)
+        console.log(user)
 
         // 3. Once we have the user we can compare actualRefreshToken with the one stored in db
         if (user) {
@@ -92,7 +94,7 @@ export const refreshTokens = async (req, res, next) => {
                 const { accessToken, refreshToken } = await JWTgenerator(user)
                 user.refreshToken = refreshToken
                 await user.save()
-                console.log(user)
+
                 res.cookie("accessToken", accessToken, {
                     httpOnly: true,
                 });
@@ -113,7 +115,7 @@ export const refreshTokens = async (req, res, next) => {
 
 export const basicAuthMiddleware = async (req, res, next) => {
     if (!req.headers.authorization) {
-        next(createError(401, { message: "Authorization required" }));
+        next(createError(400, { message: "Authorization required" }));
     } else {
         const decoded = atob(req.headers.authorization.split(" ")[1]);
         const [email, password] = decoded.split(":");
@@ -124,7 +126,7 @@ export const basicAuthMiddleware = async (req, res, next) => {
             req.user = user;
             next();
         } else {
-            next(createError(401, { message: "Credentials wrong" }));
+            next(createError(400, { message: "Credentials wrong" }));
         }
     }
 };

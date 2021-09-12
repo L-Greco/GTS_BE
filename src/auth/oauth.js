@@ -32,7 +32,7 @@ passport.use("google", new GoogleStrategy({
                 }
                 const createdUser = new UserModel(newUser);
                 const savedUser = await createdUser.save();
-                console.log(savedUser)
+
                 const tokens = await JWTgenerator(savedUser);
 
                 next(null, { savedUser, tokens });

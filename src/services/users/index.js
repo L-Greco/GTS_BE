@@ -6,6 +6,20 @@ import bcrypt from "bcrypt"
 import { JWTMiddleWare, JWTgenerator, refreshTokens, basicAuthMiddleware } from "../../auth/tools.js";
 const usersRouter = express.Router();
 
+usersRouter.get(
+    "/me",
+    JWTMiddleWare,
+    async (req, res, next) => {
+        try {
+
+            const dataToSend = req.user.accountSettings ? { ...req.user.profile, ...req.user.accountSettings } : req.user.profile
+            res.status(200).send(dataToSend);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+);
 
 usersRouter.post(
     "/register",
@@ -50,18 +64,21 @@ usersRouter.put(
     async (req, res, next) => {
         try {
 
-            if (req.user.password !== req.body.password) {
+            if (req.user.password !== req.body.password && req.body.password) {
                 req.body.password = await bcrypt.hash(req.body.password, 10)
             }
-            const updatedUser = await UserModel.updateOne(
-                { _id: req.user._id },
+            const updatedUser = await UserModel.findByIdAndUpdate(
+                req.user._id,
                 {
+
                     ...req.body,
 
                 },
                 { runValidators: true, new: true }
             );
-            res.status(201).send(updatedUser);
+            // console.log(updatedUser)
+            // res.status(200).send(updatedUser);
+            res.status(200).send("ok")
         } catch (error) {
             if (error.name === "MongoError")
                 res.send({
@@ -114,7 +131,7 @@ usersRouter.post(
 
 
 
-usersRouter.get("/refreshToken/", refreshTokens, async (req, res, next) => {
+usersRouter.post("/refreshToken", refreshTokens, async (req, res, next) => {
     // we go to this route when the access token is invalid so we create a new pair 
     // of tokens
     try {
@@ -145,7 +162,14 @@ usersRouter.get(
                 httpOnly: true,
             });
 
-            res.status(200).redirect(process.env.FE_URL);
+            // if (req.user.user.newUser) {
+            //     res.status(200).redirect(process.env.FE_URL + "/newUser");
+            // }
+            // else {
+            //     res.status(200).redirect(process.env.FE_URL + "/home");
+            // }
+            res.status(200).redirect(process.env.FE_URL + "/home");
+
 
 
         } catch (error) {

@@ -20,7 +20,8 @@ const UserSchema = new Schema(
         },
         password: { type: String },
         refreshToken: { type: String },
-        providerId: { type: String }
+        providerId: { type: String },
+        newUser: { type: Boolean, default: true }
         //   folders:[folderSchema]
 
     },
