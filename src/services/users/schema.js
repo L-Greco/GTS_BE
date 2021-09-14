@@ -14,9 +14,9 @@ const UserSchema = new Schema(
             avatar: { type: String, default: "https://source.unsplash.com/random" },
         },
         accountSettings: {
-            preferredEditorLanguage: { type: String },
-            preferredEditorTheme: { type: String },
-            preferredApplicationLanguage: { type: String }
+            preferredEditorLanguage: { type: String, default: "javascript" },
+            preferredEditorTheme: { type: String, default: "tomorrow-night-bright" },
+            preferredApplicationLanguage: { type: String, default: "english" }
         },
         password: { type: String },
         refreshToken: { type: String },
@@ -34,6 +34,9 @@ UserSchema.methods.toJSON = function () {
     delete userObj.refreshToken;
     delete userObj.password;
     delete userObj.__v;
+    delete userObj.providerId
+    delete userObj.updatedAt
+    delete userObj.createdAt
 
     return userObj;
 };

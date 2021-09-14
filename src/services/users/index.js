@@ -13,7 +13,7 @@ usersRouter.get(
         try {
 
             const dataToSend = req.user.accountSettings ? { ...req.user.profile, ...req.user.accountSettings } : req.user.profile
-            res.status(200).send(dataToSend);
+            res.status(200).send(req.user);
         } catch (error) {
             console.log(error);
             next(error);

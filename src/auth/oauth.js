@@ -45,6 +45,8 @@ passport.use("google", new GoogleStrategy({
     }
 ))
 
+
+
 passport.serializeUser(function (user, next) {
     // this is for req.user
     next(null, user);
