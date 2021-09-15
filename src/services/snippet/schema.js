@@ -21,9 +21,7 @@ const snippetSchema = new Schema(
 
         },
         parent: {
-            homePage: { type: Boolean, default: true },
-            folder: { type: String }
-
+            type: String
         },
         public: {
             type: Boolean,

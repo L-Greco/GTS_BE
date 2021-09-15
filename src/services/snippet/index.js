@@ -22,7 +22,9 @@ SnippetRouter.get("/home", async (req, res, next) => {
         const homeSnippets = await SnippetModel.find({
             $and:
                 [
-                    { "parent.folder": { $eq: "none" } },
+                    // { "parent.folder": { $eq: "none" } },
+                    // { "userId": req.user._id }
+                    { "parent": { $eq: "home" } },
                     { "userId": req.user._id }
                 ]
         },
