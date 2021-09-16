@@ -1,20 +1,50 @@
-// import Jwt from "jsonwebtoken";
-// const secret = process.env.JWT_TOKEN_SECRET
+// crypto module
+import crypto from "crypto"
+console.time("crypto")
 
-// console.time("jwt")
-// const token = Jwt.sign({ name: "Kostas", surname: "Makaronas" }, secret, { expiresIn: 1 })
-// console.timeEnd("jwt")
-// console.log(token)
-// let aaa
-// const verified = setTimeout(() => {
-//     aaa = Jwt.verify(token, secret)
-//     console.log(aaa)
-// }
-//     , 1000)
-// import bcrypt from "bcrypt"
-// console.time("bcrypt")
-// let asd = await bcrypt.hash("i am kostas", 10)
-// console.timeEnd("bcrypt")
+const algorithm = "aes-256-cbc";
 
-// console.log(asd)
+// generate 16 bytes of random data
+const initVector = crypto.randomBytes(16);
+const initVector1 = crypto.randomBytes(16);
+console.log(initVector)
+console.log(initVector1)
 
+// protected data
+const message = `// secret key generate 32 bytes of random data
+const Securitykey = crypto.randomBytes(32);
+
+// the cipher function
+// secret key generate 32 bytes of random data
+const Securitykey = crypto.randomBytes(32);
+
+// the cipher function
+const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+
+// encrypt the message`
+
+// secret key generate 32 bytes of random data
+const Securitykey = crypto.randomBytes(32);
+
+// the cipher function
+const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+
+
+// encrypt the message
+// input encoding
+// output encoding
+let encryptedData = cipher.update(message, "utf-8", "hex");
+
+// encryptedData += cipher.final("hex");
+
+console.log("Encrypted message: " + encryptedData);
+
+// the decipher function
+const decipher = crypto.createDecipheriv(algorithm, Securitykey, initVector1);
+
+let decryptedData = decipher.update(encryptedData, "hex", "utf-8");
+
+// decryptedData += decipher.final("utf8");
+
+console.log("Decrypted message: " + decryptedData);
+console.timeEnd("crypto")

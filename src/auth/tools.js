@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken"
 import atob from "atob"
 import UserModel from "../services/users/schema.js"
 import createError from "http-errors";
+import crypto from "crypto"
 
 
 // edw dhmiourgw ena kainourgio promise oste na mporw meta na pw 
@@ -154,3 +155,25 @@ export const basicAuthMiddleware = async (req, res, next) => {
 //        return error
 //     }
 // }
+export const encryptData = (message) => {
+    const algorithm = "aes-256-cbc";
+    const iv = new Buffer(crypto.randomBytes(16))
+    const initVector = iv.toString('hex').slice(0, 16);
+    const key = process.env.CRYPTO_SECRET
+    const cipher = crypto.createCipheriv(algorithm, key.slice(0, 32), initVector);
+    return cipher.update(message, "utf-8", "hex");
+
+}
+
+export const decryptData = (encryptedData) => {
+    const algorithm = "aes-256-cbc";
+    const iv = new Buffer(crypto.randomBytes(16))
+    const initVector = iv.toString('hex').slice(0, 16);
+
+    const decipher = crypto.createDecipheriv(algorithm, process.env.CRYPTO_SECRET.slice(0, 32), initVector);
+    return decipher.update(encryptedData, "hex", "utf-8");
+
+}
+
+
+

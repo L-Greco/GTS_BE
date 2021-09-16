@@ -34,4 +34,17 @@ const snippetSchema = new Schema(
     { timestamps: true }
 )
 
+snippetSchema.methods.toJSON = function () {
+    const snippet = this;
+    const snippetObj = snippet.toObject();
+
+    delete snippetObj.__v;
+    delete snippetObj.updatedAt
+    delete snippetObj.createdAt
+    delete snippetObj.userId
+
+    return snippetObj;
+};
+
+
 export default model("Snippet", snippetSchema)
