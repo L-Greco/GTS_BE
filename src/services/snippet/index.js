@@ -9,8 +9,8 @@ const SnippetRouter = Router()
 SnippetRouter.post("/", JWTMiddleWare, async (req, res, next) => {
     try {
 
-        const { title, _id, language } = await new SnippetModel({ ...req.body, userId: req.user._id }).save()
-        res.status(201).send({ title, _id, language })
+        const newSnippet = await new SnippetModel({ ...req.body, userId: req.user._id }).save()
+        res.status(201).send(newSnippet)
     } catch (error) {
         if (error.message.includes("validation")) {
             next(createError(400, { message: error.message }))
@@ -32,8 +32,8 @@ SnippetRouter.get("/home", JWTMiddleWare, async (req, res, next) => {
                     { "parent": { $eq: "home" } },
                     { "userId": req.user._id }
                 ]
-        },
-            { title: 1, language: 1 }
+        }
+
         )
         console.timeEnd("mongo") // 2 snippets with the filtering ===> mongo: 63.642ms 
         //  all the data  for 2 snippets ===>  mongo: 66.269ms
@@ -55,8 +55,8 @@ SnippetRouter.get("/folder/:folderName", JWTMiddleWare, async (req, res, next) =
                     { "parent": { $eq: req.params.folderName } },
                     { "userId": req.user._id }
                 ]
-        },
-            { title: 1, language: 1, _id: 1 }
+        }
+
         )
         console.timeEnd("mongo") // 2 snippets with the filtering ===> mongo: 63.642ms 
         //  all the data  for 2 snippets ===>  mongo: 66.269ms

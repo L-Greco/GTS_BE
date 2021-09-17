@@ -9,25 +9,32 @@ const snippetSchema = new Schema(
 
         },
         title: {
-            type: String
+            type: String,
+            required: true
 
         },
         language: {
             type: String,
+            required: true
 
         },
         code: {
             type: String,
+            required: true
 
         },
         parent: {
-            type: String
+            type: String,
+            required: true
         },
         public: {
             type: Boolean,
 
         },
         queryParameters: {
+            type: String
+        },
+        comments: {
             type: String
         }
     },
