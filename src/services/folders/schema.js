@@ -15,9 +15,8 @@ const folderSchema = new Schema(
         },
 
         parent: {
-            type: String,
-            required: true,
-            default: "home"
+            home: { type: Boolean, default: true },
+            folderId: { type: mongoose.Types.ObjectId, ref: "Folder", }
         },
 
     },

@@ -11,13 +11,14 @@ const UserSchema = new Schema(
             lastName: { type: String, required: true },
             email: { type: String, required: true, unique: true },
 
-            avatar: { type: String, default: "https://source.unsplash.com/random" },
+            avatar: { type: String },
         },
         accountSettings: {
             preferredEditorLanguage: { type: String, default: "javascript" },
             preferredEditorTheme: { type: String, default: "tomorrow-night-bright" },
             preferredApplicationLanguage: { type: String, default: "english" }
         },
+        folders: [{ type: Schema.Types.ObjectId, ref: "Folder" }],
         password: { type: String },
         refreshToken: { type: String },
         providerId: { type: String },
@@ -37,6 +38,7 @@ UserSchema.methods.toJSON = function () {
     delete userObj.providerId
     delete userObj.updatedAt
     delete userObj.createdAt
+
 
     return userObj;
 };

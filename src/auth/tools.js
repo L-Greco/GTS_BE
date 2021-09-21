@@ -64,7 +64,7 @@ export const JWTMiddleWare = async (req, res, next) => {
     } else {
         try {
             const content = await verifyToken(req.cookies.accessToken);
-            const user = await UserModel.findById(content._id)
+            const user = await UserModel.findById(content._id).populate("folders", { _id: 1, name: 1, parent: 1 })
 
             if (user) {
                 req.user = user;
@@ -110,6 +110,7 @@ export const refreshTokens = async (req, res, next) => {
     } catch (error) {
         console.log(error)
         next(createError(401, { message: "Token not valid" }));
+
     }
 }
 

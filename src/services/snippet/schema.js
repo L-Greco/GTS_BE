@@ -24,8 +24,8 @@ const snippetSchema = new Schema(
 
         },
         parent: {
-            type: String,
-            required: true
+            home: { type: Boolean, default: true },
+            folderId: { type: mongoose.Types.ObjectId, ref: "Folder", }
         },
         public: {
             type: Boolean,

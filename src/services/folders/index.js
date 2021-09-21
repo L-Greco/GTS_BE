@@ -1,5 +1,6 @@
 import { Router } from "express";
 import FolderModel from "./schema.js"
+import UserModel from "../users/schema.js"
 import createError from "http-errors"
 import { JWTMiddleWare } from "../../auth/tools.js";
 
@@ -9,29 +10,11 @@ const FolderRouter = Router()
 FolderRouter.post("/", JWTMiddleWare, async (req, res, next) => {
     try {
         const folder = await new FolderModel({ ...req.body, userId: req.user._id }).save()
+        await UserModel.findByIdAndUpdate(req.user._id,
+            {
+                $push: { folders: folder._id }
+            })
         res.status(201).send(folder)
-    } catch (error) {
-        if (error.message.toLowerCase().includes("validation")) {
-            next(createError(400, { message: error.message }))
-        }
-        next(error)
-
-
-    }
-})
-FolderRouter.get("/parent/:parentName", JWTMiddleWare, async (req, res, next) => {
-    try {
-        const folders = await FolderModel.find({
-            $and:
-                [
-
-                    { "parent": { $eq: req.params.parentName } },
-                    { "userId": req.user._id }
-                ]
-        })
-
-
-        res.status(200).send(folders)
     } catch (error) {
         if (error.message.toLowerCase().includes("validation")) {
             next(createError(400, { message: error.message }))
@@ -47,7 +30,7 @@ FolderRouter.get("/home", JWTMiddleWare, async (req, res, next) => {
             $and:
                 [
 
-                    { "parent": { $eq: "home" } },
+                    { "parent.home": true },
                     { "userId": req.user._id }
                 ]
         })
@@ -63,6 +46,29 @@ FolderRouter.get("/home", JWTMiddleWare, async (req, res, next) => {
 
     }
 })
+FolderRouter.get("/:parentName", JWTMiddleWare, async (req, res, next) => {
+    try {
+        const folders = await FolderModel.find({
+            $and:
+                [
+
+                    { "parent.folderId": { $eq: req.params.parentName } },
+                    { "userId": req.user._id }
+                ]
+        })
+
+
+        res.status(200).send(folders)
+    } catch (error) {
+        if (error.message.toLowerCase().includes("validation")) {
+            next(createError(400, { message: error.message }))
+        }
+        next(error)
+
+
+    }
+})
+
 
 
 FolderRouter.put("/edit/:folderId", JWTMiddleWare, async (req, res, next) => {
