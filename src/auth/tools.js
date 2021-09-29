@@ -17,7 +17,7 @@ const generateAccessToken = (payload) =>
         jwt.sign(
             payload,
             process.env.JWT_TOKEN_SECRET,
-            { expiresIn: "15 min" },
+            { expiresIn: "1 min" },
             (err, token) => {
                 if (err) reject(err);
 
@@ -31,7 +31,7 @@ const generateRefreshToken = (payload) =>
         jwt.sign(
             payload,
             process.env.JWT_TOKEN_SECRET,
-            { expiresIn: "15 days" },
+            { expiresIn: "2 min" },
             (err, token) => {
                 if (err) reject(err);
 
@@ -109,7 +109,7 @@ export const refreshTokens = async (req, res, next) => {
 
     } catch (error) {
         console.log(error)
-        next(createError(401, { message: "Token not valid" }));
+        next(createError(401, { message: "Refresh Token Expired " }));
 
     }
 }
