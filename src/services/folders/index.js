@@ -1,6 +1,7 @@
 import { Router } from "express";
 import FolderModel from "./schema.js"
 import UserModel from "../users/schema.js"
+import SnippetModel from "../snippet/schema.js"
 import createError from "http-errors"
 import { JWTMiddleWare } from "../../auth/tools.js";
 
@@ -83,6 +84,24 @@ FolderRouter.put("/edit/:folderId", JWTMiddleWare, async (req, res, next) => {
             { runValidators: true, new: true }
         );
         res.status(201).send(updatedFolder)
+    } catch (error) {
+        next(error)
+    }
+})
+FolderRouter.delete("/deleteAndSnippets/:folderId", JWTMiddleWare, async (req, res, next) => {
+    try {
+        const updatedFolder = await FolderModel.findByIdAndDelete(req.params.folderId);
+        const deleteSnipps = await SnippetModel.deleteMany({ "parent.folderId": req.params.folderId })
+        const moveFolders = await FolderModel.updateMany(
+            {
+                "parent.folderId": req.params.folderId
+            },
+            {
+                "parent.home": true,
+                "parent.folderId": null
+            }
+        )
+        res.status(200).send("folder deleted!")
     } catch (error) {
         next(error)
     }
