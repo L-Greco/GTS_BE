@@ -106,6 +106,42 @@ FolderRouter.delete("/deleteAndSnippets/:folderId", JWTMiddleWare, async (req, r
         next(error)
     }
 })
+FolderRouter.delete("/deleteFolderAndMoveSnippets/:folderId/:parentId", JWTMiddleWare, async (req, res, next) => {
+    try {
+        const updatedFolder = await FolderModel.findByIdAndDelete(req.params.folderId);
+        if (req.params.parentId === "home") {
+            const updatedSnippets = await SnippetModel.updateMany({
+                "parent.folderId": req.params.folderId
+            },
+                {
+                    "parent.home": true,
+                    "parent.folderId": null
+                })
+        } else {
+            const updatedSnippets = await SnippetModel.updateMany({
+                "parent.folderId": req.params.folderId
+            },
+                {
+                    "parent.home": false,
+                    "parent.folderId": req.params.parentId
+                })
+        }
+
+
+        const moveFolders = await FolderModel.updateMany(
+            {
+                "parent.folderId": req.params.folderId
+            },
+            {
+                "parent.home": true,
+                "parent.folderId": null
+            }
+        )
+        res.status(200).send("folder deleted!")
+    } catch (error) {
+        next(error)
+    }
+})
 FolderRouter.delete("/delete/:folderId", JWTMiddleWare, async (req, res, next) => {
     try {
         const updatedFolder = await FolderModel.findByIdAndDelete(req.params.folderId);

@@ -17,7 +17,7 @@ const generateAccessToken = (payload) =>
         jwt.sign(
             payload,
             process.env.JWT_TOKEN_SECRET,
-            { expiresIn: "1 week" },
+            { expiresIn: "15 min" },
             (err, token) => {
                 if (err) reject(err);
 
