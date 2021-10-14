@@ -31,7 +31,7 @@ const generateRefreshToken = (payload) =>
         jwt.sign(
             payload,
             process.env.JWT_TOKEN_SECRET,
-            { expiresIn: "15 days" },
+            // { expiresIn: "15 days" }, it never expires
             (err, token) => {
                 if (err) reject(err);
 

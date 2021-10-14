@@ -6,10 +6,10 @@ const { model, Schema } = mongoose
 const UserSchema = new Schema(
     {
         profile: {
-            username: { type: String },
-            firstName: { type: String, required: true },
-            lastName: { type: String, required: true },
-            email: { type: String, required: true, unique: true },
+            userName: { type: String },
+            firstName: { type: String },
+            lastName: { type: String },
+            email: { type: String, unique: true },
 
             avatar: { type: String },
         },
@@ -22,8 +22,9 @@ const UserSchema = new Schema(
         password: { type: String },
         refreshToken: { type: String },
         providerId: { type: String },
+        provider: { type: String },
         newUser: { type: Boolean, default: true }
-        //   folders:[folderSchema]
+
 
     },
     { timestamps: true }
