@@ -146,7 +146,7 @@ usersRouter.post("/refreshToken", refreshTokens, async (req, res, next) => {
 // scope needs to be defined, it says what information google is going to give us 
 // this endpoint just redirects to google :)
 usersRouter.get("/googleLogin", passport.authenticate("google", { scope: ["profile", "email"] }))
-usersRouter.get("/githubLogin", passport.authenticate("github", { scope: ["profile", "email"] }))
+
 
 
 
@@ -178,6 +178,7 @@ usersRouter.get(
         }
     }
 );
+usersRouter.get("/githubLogin", passport.authenticate("github", { scope: ["profile", "email"] }))
 usersRouter.get(
     "/githubRedirect",
     passport.authenticate("github"),
@@ -191,12 +192,7 @@ usersRouter.get(
                 httpOnly: true,
             });
 
-            // if (req.user.user.newUser) {
-            //     res.status(200).redirect(process.env.FE_URL + "/newUser");
-            // }
-            // else {
-            //     res.status(200).redirect(process.env.FE_URL + "/home");
-            // }
+
             res.status(200).redirect(process.env.FE_URL + "/home");
 
 
