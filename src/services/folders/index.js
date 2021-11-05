@@ -90,9 +90,13 @@ FolderRouter.put("/edit/:folderId", JWTMiddleWare, async (req, res, next) => {
 })
 FolderRouter.delete("/deleteAndSnippets/:folderId", JWTMiddleWare, async (req, res, next) => {
     try {
-        const updatedFolder = await FolderModel.findByIdAndDelete(req.params.folderId);
-        const deleteSnipps = await SnippetModel.deleteMany({ "parent.folderId": req.params.folderId })
-        const moveFolders = await FolderModel.updateMany(
+        await UserModel.findByIdAndUpdate(req.user._id,
+            {
+                $pull: { folders: { _id: req.params.folderId } }
+            })
+        await FolderModel.findByIdAndDelete(req.params.folderId);
+        await SnippetModel.deleteMany({ "parent.folderId": req.params.folderId })
+        await FolderModel.updateMany(
             {
                 "parent.folderId": req.params.folderId
             },
@@ -108,7 +112,7 @@ FolderRouter.delete("/deleteAndSnippets/:folderId", JWTMiddleWare, async (req, r
 })
 FolderRouter.delete("/deleteFolderAndMoveSnippets/:folderId/:parentId", JWTMiddleWare, async (req, res, next) => {
     try {
-        const updatedFolder = await FolderModel.findByIdAndDelete(req.params.folderId);
+        await FolderModel.findByIdAndDelete(req.params.folderId);
         if (req.params.parentId === "home") {
             const updatedSnippets = await SnippetModel.updateMany({
                 "parent.folderId": req.params.folderId

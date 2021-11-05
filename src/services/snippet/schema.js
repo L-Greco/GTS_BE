@@ -29,6 +29,7 @@ const snippetSchema = new Schema(
         },
         public: {
             type: Boolean,
+            default: false
 
         },
         queryParameters: {

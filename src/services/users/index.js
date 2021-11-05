@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import UserModel from "./schema.js"
+import FolderModel from "../folders/schema.js"
 import createError from "http-errors";
 import bcrypt from "bcrypt"
 import { JWTMiddleWare, JWTgenerator, refreshTokens, basicAuthMiddleware } from "../../auth/tools.js";
@@ -14,6 +15,29 @@ usersRouter.get(
 
             const dataToSend = req.user.accountSettings ? { ...req.user.profile, ...req.user.accountSettings } : req.user.profile
             res.status(200).send(req.user);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+);
+usersRouter.get(
+    "/updateMyFolders",
+    JWTMiddleWare,
+    async (req, res, next) => {
+        try {
+            const currentFolders = await FolderModel.find(
+                { userId: req.user._id }
+            )
+
+            await UserModel.findByIdAndUpdate(req.user._id,
+                {
+
+                    "folders": currentFolders
+                }
+            )
+
+            res.status(200).send(currentFolders);
         } catch (error) {
             console.log(error);
             next(error);
