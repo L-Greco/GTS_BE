@@ -181,11 +181,11 @@ usersRouter.get(
         try {
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
-                httpOnly: false,
+                httpOnly: true,
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
-                httpOnly: false,
+                httpOnly: true,
 
             });
 
