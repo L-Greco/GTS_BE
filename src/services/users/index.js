@@ -182,17 +182,14 @@ usersRouter.get(
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 httpOnly: true,
+                proxy: true,
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 httpOnly: true,
+                proxy: true,
             });
 
-            // if (req.user.user.newUser) {
-            //     res.status(200).redirect(process.env.FE_URL + "/newUser");
-            // }
-            // else {
-            //     res.status(200).redirect(process.env.FE_URL + "/home");
-            // }
+
             res.status(200).redirect(process.env.FE_URL + "/home");
 
 
@@ -211,6 +208,7 @@ usersRouter.get(
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 httpOnly: true,
+
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 httpOnly: true,
