@@ -207,11 +207,11 @@ usersRouter.get(
         try {
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
-                httpOnly: true,
+
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
-                httpOnly: true,
+
             });
 
 
