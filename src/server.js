@@ -17,8 +17,8 @@ const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
 // *********************** MIDDLEWARES *********************** //
 const corsOptions = { origin: process.env.FE_URL, credentials: true };
 server.use(express.json());
-server.use(cookieParser());
-server.use(cors({ origin: true, credentials: true }))
+server.use(cookieParser());// in order to read cookie sent from client
+server.use(cors(corsOptions))
 server.use(passport.initialize())
 
 // *********************** ROUTES *********************** //
