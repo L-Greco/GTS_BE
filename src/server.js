@@ -18,7 +18,7 @@ const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
 const corsOptions = { origin: process.env.FE_URL, credentials: true };
 server.use(express.json());
 server.use(cookieParser());
-server.use(cors({ credentials: true }))
+server.use(cors({ origin: true, credentials: true }))
 server.use(passport.initialize())
 
 // *********************** ROUTES *********************** //
@@ -41,6 +41,6 @@ mongoose
         server.listen(PORT, () => {
             console.table(listEndpoints(server));
             console.table({ "Running At Port Number": PORT });
-            console.log("1")
+            console.log("2")
         })
     );
