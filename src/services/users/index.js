@@ -182,10 +182,12 @@ usersRouter.get(
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 httpOnly: false,
+                secure: process.env.NODE_ENV === 'production' ? true : false
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 httpOnly: false,
+                secure: process.env.NODE_ENV === 'production' ? true : false
 
             });
 
