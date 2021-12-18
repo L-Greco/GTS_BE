@@ -54,7 +54,7 @@ export const JWTgenerator = async (user) => {
     user.refreshToken = refreshToken;
 
     await user.save()
-
+    console.log({ accessToken, refreshToken })
     return { accessToken, refreshToken }
 }
 export const JWTMiddleWare = async (req, res, next) => {
