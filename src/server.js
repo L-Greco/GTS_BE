@@ -18,7 +18,7 @@ const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
 const corsOptions = { origin: process.env.FE_URL, credentials: true };
 server.use(express.json());
 server.use(cookieParser());
-server.use(cors())
+server.use(cors({ credentials: true }))
 server.use(passport.initialize())
 
 // *********************** ROUTES *********************** //
