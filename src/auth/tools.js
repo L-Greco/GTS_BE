@@ -59,7 +59,7 @@ export const JWTgenerator = async (user) => {
 }
 export const JWTMiddleWare = async (req, res, next) => {
     console.log(req)
-    console.log(req.cookies)
+    console.log(req.cookies.accessToken)
     if (!req.cookies.accessToken) {
         next(createError(401, { message: "Provide Access Token" }));
     } else {
