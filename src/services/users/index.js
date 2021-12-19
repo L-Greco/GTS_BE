@@ -182,12 +182,12 @@ usersRouter.get(
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 httpOnly: false,
-                secure: process.env.NODE_ENV === 'production' ? true : false
+                secure: true
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 httpOnly: false,
-                secure: process.env.NODE_ENV === 'production' ? true : false
+                secure: true
 
             });
 
@@ -210,16 +210,16 @@ usersRouter.get(
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 httpOnly: false,
-                secure: process.env.NODE_ENV === 'production' ? true : false
+                secure: true
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 httpOnly: false,
-                secure: process.env.NODE_ENV === 'production' ? true : false
+                secure: true
             });
 
 
-            res.status(200).redirect(process.env.FE_URL + "/home");
+            res.redirect(302, process.env.FE_URL + "/home");
 
 
 
