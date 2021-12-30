@@ -181,12 +181,12 @@ usersRouter.get(
         try {
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
-                httpOnly: false,
-                secure: true
+                secure: true,
+                sameSite: 'none'
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
-                httpOnly: false,
+                sameSite: 'none',
                 secure: true
 
             });
@@ -209,12 +209,12 @@ usersRouter.get(
         try {
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
-                httpOnly: false,
+                sameSite: 'none',
                 secure: true
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
-                httpOnly: false,
+                sameSite: 'none',
                 secure: true
             });
 
