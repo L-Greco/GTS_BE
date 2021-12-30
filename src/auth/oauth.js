@@ -7,7 +7,7 @@ import { JWTgenerator } from "./tools.js"
 passport.use("google", new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: "https://gtsbackend.herokuapp.com/users/googleRedirect",
+    callbackURL: "http://localhost:3005/users/googleRedirect",
     proxy: true
 }, // this callback function is going to be executed when we have 
     //  a response back from Google
