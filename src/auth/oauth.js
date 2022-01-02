@@ -13,7 +13,7 @@ passport.use("google", new GoogleStrategy({
     //  a response back from Google
     async (accessToken, refreshToken, profile, next) => {
         try {
-            console.log(profile)
+            // console.log(profile)
             // when we receive the profile we are going to check if it is 
             // an existant user in our db, if it is not we are going to create a new record
 
@@ -55,7 +55,7 @@ passport.use("github", new GitHubStrategy({
 },
     async (accessToken, refreshToken, profile, next) => {
         try {
-            console.log(profile)
+            // console.log(profile)
             // when we receive the profile we are going to check if it is 
             // an existant user in our db, if it is not we are going to create a new record
 

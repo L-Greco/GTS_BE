@@ -58,8 +58,6 @@ export const JWTgenerator = async (user) => {
     return { accessToken, refreshToken }
 }
 export const JWTMiddleWare = async (req, res, next) => {
-    console.log(req)
-    console.log(req.cookies.accessToken)
     if (!req.cookies.accessToken) {
         next(createError(401, { message: "Provide Access Token" }));
     } else {
@@ -86,8 +84,8 @@ export const refreshTokens = async (req, res, next) => {
 
         // 2. If the token is valid we are going to find the user in db
         const user = await UserModel.findById(decoded._id)
-        console.log(decoded)
-        console.log(user)
+        // console.log(decoded)
+        // console.log(user)
 
         // 3. Once we have the user we can compare actualRefreshToken with the one stored in db
         if (user) {
