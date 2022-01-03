@@ -135,15 +135,13 @@ usersRouter.delete(
 );
 
 usersRouter.post(
-    "/logout",
-    JWTMiddleWare,
-    async (req, res, next) => {
+    "/logout", async (req, res, next) => {
         try {
-            if (req.user) {
-                res.clearCookie("accessToken");
-                res.clearCookie("refreshToken");
-                res.status(200).send();
-            }
+
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
+            res.status(200).send();
+
         } catch (error) {
             console.log(error);
             next(error);
