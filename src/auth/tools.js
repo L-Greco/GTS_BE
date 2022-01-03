@@ -96,10 +96,12 @@ export const refreshTokens = async (req, res, next) => {
                 await user.save()
 
                 res.cookie("accessToken", accessToken, {
-                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true
                 });
                 res.cookie("refreshToken", refreshToken, {
-                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true
                 });
                 next()
             }
