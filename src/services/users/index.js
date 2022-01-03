@@ -183,7 +183,7 @@ usersRouter.get(
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 secure: true,
                 sameSite: 'none',
-                path: "https://www.grabthesnippet.com"
+
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
