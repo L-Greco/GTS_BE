@@ -94,7 +94,8 @@ export const refreshTokens = async (req, res, next) => {
                 const { accessToken, refreshToken } = await JWTgenerator(user)
                 user.refreshToken = refreshToken
                 await user.save()
-
+                res.clearCookie("accessToken");
+                res.clearCookie("refreshToken");
                 res.cookie("accessToken", accessToken, {
                     sameSite: 'none',
                     secure: true
