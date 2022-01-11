@@ -182,6 +182,7 @@ usersRouter.get(
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 secure: true,
                 sameSite: 'none',
+                httpOnly: true
 
 
 
@@ -189,6 +190,7 @@ usersRouter.get(
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 sameSite: 'none',
                 secure: true,
+                httpOnly: true
 
 
             });
