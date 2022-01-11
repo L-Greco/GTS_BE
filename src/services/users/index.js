@@ -135,26 +135,12 @@ usersRouter.delete(
 );
 
 usersRouter.post(
-    "/logout", JWTMiddleWare, async (req, res, next) => {
+    "/logout",
+    async (req, res, next) => {
         try {
 
-            // res.clearCookie("accessToken");
-            // res.clearCookie("refreshToken");
-            console.log(req.cookies)
-            res.clearCookie("accessToken", req.cookies.accessToken, {
-                secure: true,
-                sameSite: 'none',
-
-
-
-            });
-            res.clearCookie("refreshToken", req.cookies.refreshToken, {
-                sameSite: 'none',
-                secure: true,
-
-
-            });
-
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
             res.status(200).send();
 
         } catch (error) {
@@ -196,12 +182,14 @@ usersRouter.get(
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 secure: true,
                 sameSite: 'none',
+                domain: process.env.FE_URL
 
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 sameSite: 'none',
-                secure: true
+                secure: true,
+                domain: process.env.FE_URL
 
             });
 
