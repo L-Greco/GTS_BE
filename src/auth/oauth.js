@@ -50,7 +50,7 @@ passport.use("google", new GoogleStrategy({
 passport.use("github", new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_SECRET,
-    callbackURL: "/users/githubRedirect",
+    callbackURL: process.env.BE_URL + "/users/githubRedirect",
     proxy: true
 },
     async (accessToken, refreshToken, profile, next) => {
