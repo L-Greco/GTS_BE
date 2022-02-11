@@ -8,6 +8,20 @@ import { JWTMiddleWare, JWTgenerator, refreshTokens, basicAuthMiddleware } from 
 const usersRouter = express.Router();
 
 usersRouter.get(
+    "/wakingTheDyno",
+    // this endpoint only to wake the heroku dyno before loggin in :/
+    async (req, res, next) => {
+        try {
+
+
+            res.status(200).send("ok");
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+);
+usersRouter.get(
     "/me",
     JWTMiddleWare,
     async (req, res, next) => {
