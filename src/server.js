@@ -17,25 +17,17 @@ const origin = process.env.FE_URL
 // *********************** MIDDLEWARES *********************** //
 const corsOptions = {
     origin: origin,
-    preflightContinue: true,
+    preflightContinue: false,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true
 };
-server.use((req, res, next) => {
 
-
-    if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-        return res.status(200).json({});
-    }
-    next();
-});
 server.use(express.json());
 server.use(cookieParser());// in order to read cookie sent from client
 
 server.use(cors(corsOptions))
 server.use(passport.initialize())
-console.log("trolo")
+console.log("troloLO")
 // *********************** ROUTES *********************** //
 
 server.use("/users", usersRouter)
