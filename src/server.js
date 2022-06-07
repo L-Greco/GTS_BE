@@ -35,7 +35,7 @@ server.use(cookieParser());// in order to read cookie sent from client
 // });
 server.use(cors(corsOptions))
 server.use(passport.initialize())
-
+console.log(":/")
 // *********************** ROUTES *********************** //
 
 server.use("/users", usersRouter)
