@@ -13,10 +13,10 @@ import FolderRouter from "./services/folders/index.js";
 
 const server = express();
 const { PORT, MONGO_CONNECTION_ATLAS } = process.env;
-
+const origin = process.env.FE_URL
 // *********************** MIDDLEWARES *********************** //
 const corsOptions = {
-    origin: process.env.FE_URL,
+    origin: origin,
     preflightContinue: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true
