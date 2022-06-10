@@ -199,7 +199,7 @@ usersRouter.get(
                 secure: true,
                 sameSite: 'none',
                 httpOnly: true,
-                domain: process.env.FE_URL
+                origin: process.env.FE_URL
 
 
 
@@ -208,7 +208,7 @@ usersRouter.get(
                 sameSite: 'none',
                 secure: true,
                 httpOnly: true,
-                domain: process.env.FE_URL
+                origin: process.env.FE_URL
 
 
             });
