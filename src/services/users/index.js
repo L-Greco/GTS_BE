@@ -199,7 +199,8 @@ usersRouter.get(
                 secure: true,
                 sameSite: 'none',
                 httpOnly: true,
-                origin: process.env.FE_URL
+                origin: process.env.FE_URL,
+                maxAge: 31536000
 
 
 
@@ -208,7 +209,8 @@ usersRouter.get(
                 sameSite: 'none',
                 secure: true,
                 httpOnly: true,
-                origin: process.env.FE_URL
+                origin: process.env.FE_URL,
+                maxAge: 31536000
 
 
             });
