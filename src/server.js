@@ -48,6 +48,7 @@ mongoose
         server.listen(PORT, () => {
             console.table(listEndpoints(server));
             console.table({ "Running At Port Number": PORT });
+            console.log("test");
 
         })
     );
