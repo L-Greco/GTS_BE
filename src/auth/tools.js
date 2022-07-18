@@ -125,12 +125,18 @@ export const basicAuthMiddleware = async (req, res, next) => {
         const [email, password] = decoded.split(":");
 
         const user = await UserModel.checkCredentials(email, password);
+        switch (user) {
+            case 400:
+                next(createError(400, { message: "Wrong Password" }))
+                break;
+            case 404:
+                next(createError(400, { message: "User Not Found" }))
+                break;
+            default:
+                req.user = user;
+                next();
 
-        if (user) {
-            req.user = user;
-            next();
-        } else {
-            next(createError(400, { message: "Credentials wrong" }));
+
         }
     }
 };

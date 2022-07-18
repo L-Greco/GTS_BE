@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
-
+import createError from "http-errors";
 const { model, Schema } = mongoose
 
 const UserSchema = new Schema(
@@ -67,10 +67,13 @@ UserSchema.static(
 
                 return user;
             } else {
-                return null;
+
+
+                return 400;
             }
         } else {
-            return null;
+
+            return 404
         }
     }
 );
