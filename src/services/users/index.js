@@ -102,7 +102,7 @@ usersRouter.get(
                     maxAge: 31536000
                 });
                 res.status(200).send(req.user);
-                // res.status(200).redirect(process.env.FE_URL + "/home");
+
             }
         } catch (error) {
             console.log(error);
