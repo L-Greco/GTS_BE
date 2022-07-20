@@ -244,12 +244,18 @@ usersRouter.get(
 
             res.cookie("accessToken", req.user.tokens.accessToken, {
                 sameSite: 'none',
-                secure: true
+                secure: true,
+                httpOnly: true,
+                origin: process.env.FE_URL,
+                maxAge: 31536000
 
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 sameSite: 'none',
-                secure: true
+                secure: true,
+                httpOnly: true,
+                origin: process.env.FE_URL,
+                maxAge: 31536000
             });
 
 
