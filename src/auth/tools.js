@@ -97,12 +97,18 @@ export const refreshTokens = async (req, res, next) => {
                 res.clearCookie("accessToken");
                 res.clearCookie("refreshToken");
                 res.cookie("accessToken", accessToken, {
+                    secure: true,
                     sameSite: 'none',
-                    secure: true
+                    httpOnly: true,
+                    origin: process.env.FE_URL,
+                    maxAge: 31536000
                 });
                 res.cookie("refreshToken", refreshToken, {
+                    secure: true,
                     sameSite: 'none',
-                    secure: true
+                    httpOnly: true,
+                    origin: process.env.FE_URL,
+                    maxAge: 31536000
                 });
                 next()
             }

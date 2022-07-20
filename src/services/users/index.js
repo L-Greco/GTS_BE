@@ -86,6 +86,7 @@ usersRouter.get(
     async (req, res, next) => {
         try {
             if (req.user) {
+
                 const { accessToken, refreshToken } = await JWTgenerator(req.user);
                 res.cookie("accessToken", accessToken, {
                     secure: true,
@@ -101,7 +102,8 @@ usersRouter.get(
                     origin: process.env.FE_URL,
                     maxAge: 31536000
                 });
-                res.status(200).send(req.user);
+
+                res.status(200).send();
 
             }
         } catch (error) {
@@ -214,9 +216,6 @@ usersRouter.get(
                 httpOnly: true,
                 origin: process.env.FE_URL,
                 maxAge: 31536000
-
-
-
             });
             res.cookie("refreshToken", req.user.tokens.refreshToken, {
                 sameSite: 'none',
@@ -224,8 +223,6 @@ usersRouter.get(
                 httpOnly: true,
                 origin: process.env.FE_URL,
                 maxAge: 31536000
-
-
             });
 
 
