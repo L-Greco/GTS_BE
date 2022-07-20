@@ -136,7 +136,7 @@ export const basicAuthMiddleware = async (req, res, next) => {
                 next(createError(400, { message: "Wrong Password" }))
                 break;
             case 404:
-                next(createError(400, { message: "User Not Found" }))
+                next(createError(404, { message: "User Not Found" }))
                 break;
             default:
                 req.user = user;
