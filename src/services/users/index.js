@@ -165,21 +165,17 @@ usersRouter.delete(
     }
 );
 
-usersRouter.post(
-    "/logout",
-    async (req, res, next) => {
-        try {
 
-            res.clearCookie("accessToken");
-            res.clearCookie("refreshToken");
-            res.status(200).send();
-
-        } catch (error) {
-            console.log(error);
-            next(error);
-        }
+usersRouter.post("/logout", async (req, res, next) => {
+    try {
+        res.cookie("accessToken", "", { expires: new Date(0) });
+        res.cookie("refreshToken", "", { expires: new Date(0) });
+        res.status(200).send();
+    } catch (error) {
+        console.log(error);
+        next(error);
     }
-);
+});
 
 
 
